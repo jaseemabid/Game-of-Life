@@ -13,11 +13,9 @@
   ;; Display grid
   (loop for row in gen
 		do
-		(insert (concat "\n"
-						(loop for i in row
-							  collect (if (= i 0) 32 95 )
-							  )))
-		)
+		(insert (concat (loop for i in row
+							  collect (if (= i 0) 32 176)) "\n" )
+				))
   )
 
 (defun game-of-life ()
