@@ -26,11 +26,11 @@
 		(setq tmp ())
 		(loop for i in row
 			  do
-			  (push (if (= i 0) 176 32) tmp)
+			  (push (if (= i 0) 1 0) tmp)
 			  )
 		(push tmp result)
 		)
-  result
+  (setq gen result)
   )
 
 (defun game-of-life ()
