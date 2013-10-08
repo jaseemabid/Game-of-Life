@@ -18,6 +18,21 @@
 				))
   )
 
+(defun mutate ()
+  "Take a gen as arg and return the next"
+  (setq result ())
+  (loop for row in gen
+		do
+		(setq tmp ())
+		(loop for i in row
+			  do
+			  (push (if (= i 0) 176 32) tmp)
+			  )
+		(push tmp result)
+		)
+  result
+  )
+
 (defun game-of-life ()
   "Game of life"
   (interactive)
