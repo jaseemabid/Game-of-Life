@@ -33,11 +33,25 @@
   (setq gen result)
   )
 
+(defun progress ()
+  (mutate)
+  (show-gen)
+  )
+
+(defun gol-cleanup ()
+  "Exit from game of life, cleanup"
+  (if (string= (buffer-name) "game-of-life")
+	  (progn
+		(message "Exit from game of life, cleanup")
+		(cancel-timer timer)))
+  )
+
 (defun game-of-life ()
   "Game of life"
   (interactive)
   (switch-to-buffer (get-buffer-create "game-of-life"))
-  (show-gen)
+  (setq timer (run-with-timer 0 1 'progress))
+  (add-hook 'kill-buffer-hook 'gol-cleanup)
   )
 
 (game-of-life)
