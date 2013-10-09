@@ -2,6 +2,8 @@
 ;; Author: Jaseem Abid <jaseemabid@gmail.com>
 
 (setq
+ live 176
+ dead 32
  gen '((0 0 0 1 0 0 0 1)
 	   (1 1 0 1 0 1 0 1)
 	   (0 0 0 1 0 0 1 0)
@@ -14,7 +16,7 @@
   (loop for row in gen
 		do
 		(insert (concat (loop for i in row
-							  collect (if (= i 0) 32 176)) "\n" )
+							  collect (if (= i 0) dead alive)) "\n" )
 				))
   )
 
