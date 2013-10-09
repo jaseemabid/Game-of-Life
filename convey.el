@@ -2,7 +2,7 @@
 ;; Author: Jaseem Abid <jaseemabid@gmail.com>
 
 (setq
- live 176
+ alive 176
  dead 32
  gen '((0 0 0 1 0 0 0 1)
 	   (1 1 0 1 0 1 0 1)
