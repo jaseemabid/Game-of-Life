@@ -56,4 +56,4 @@
   (add-hook 'kill-buffer-hook 'gol-cleanup)
   )
 
-(game-of-life)
+;; (game-of-life)
