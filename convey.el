@@ -42,7 +42,9 @@
 (defun mutate ()
   "Take a gen as arg and return the next"
   (loop for row in gen
+		for i from 0
 		collect (loop for cell in row
+					  for j from 0
 					  collect (if (= cell 0) 1 0))
 		))
 
