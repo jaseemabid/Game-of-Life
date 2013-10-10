@@ -18,8 +18,7 @@
 		do
 		(insert (concat (loop for i in row
 							  collect (if (= i 0) dead alive)) "\n" )
-				))
-  )
+				)))
 
 (defun get-neighbour (x y)
   (if (and (> x -1) (> y -1))
@@ -49,23 +48,20 @@
 
 (defun progress ()
   (setq gen (mutate))
-  (show-gen)
-  )
+  (show-gen))
 
-(defun gol-cleanup ()
+(defun cleanup ()
   "Exit from game of life, cleanup"
   (if (string= (buffer-name) life-buffer)
 	  (progn
 		(message "Exit from game of life, cleanup")
-		(cancel-timer timer)))
-  )
+		(cancel-timer timer))))
 
 (defun game-of-life ()
   "Game of life"
   (interactive)
   (switch-to-buffer (get-buffer-create life-buffer))
   (setq timer (run-with-timer 0 1 'progress))
-  (add-hook 'kill-buffer-hook 'gol-cleanup)
-  )
+  (add-hook 'kill-buffer-hook 'cleanup))
 
 ;; (game-of-life)
