@@ -21,6 +21,25 @@
 				))
   )
 
+(defun get-neighbour (x y)
+  (if (and (> x -1) (> y -1))
+	  (nth x (nth y gen))
+	nil))
+
+(defun count-neighbours (x y)
+  (count 1 (list
+			(get-neighbour (- x 1) (- y 1))
+			(get-neighbour x (- y 1))
+			(get-neighbour (+ x 1) (- y 1))
+
+			(get-neighbour (- x 1) y)
+			(get-neighbour (+ x 1) y)
+
+			(get-neighbour (- x 1) (+ y 1))
+			(get-neighbour x (+ y 1))
+			(get-neighbour (+ x 1) (+ y 1))
+			)))
+
 (defun mutate ()
   "Take a gen as arg and return the next"
   (loop for row in gen
