@@ -23,21 +23,13 @@
 
 (defun mutate ()
   "Take a gen as arg and return the next"
-  (setq result ())
   (loop for row in gen
-		do
-		(setq tmp ())
-		(loop for i in row
-			  do
-			  (push (if (= i 0) 1 0) tmp)
-			  )
-		(push tmp result)
-		)
-  (setq gen result)
-  )
+		collect (loop for i in row
+					  collect (if (= i 0) 1 0))
+		))
 
 (defun progress ()
-  (mutate)
+  (setq gen (mutate))
   (show-gen)
   )
 
