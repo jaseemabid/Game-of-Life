@@ -60,8 +60,8 @@
 		collect (loop for cell in row
 					  for j from 0
 					  do
-					  (setq n (count-neighbours i j))
-					  collect  (if cell
+					  (setq n (count-neighbours j i))
+					  collect  (if (= cell 1)
 								   ;; Alive cell, rules 1 - 3
 								   (case n
 									 (0 0)
