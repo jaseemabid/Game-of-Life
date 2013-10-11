@@ -39,14 +39,36 @@
 			(get-neighbour (+ x 1) (+ y 1))
 			)))
 
+;; 1. Any live cell with fewer than two live neighbours dies, as if caused by
+;; under-population.
+;; 2. Any live cell with two or three live neighbours lives on to the next
+;; generation.
+;; 3. Any live cell with more than three live neighbours dies, as if by
+;; overcrowding.
+;; 4. Any dead cell with exactly three live neighbours becomes a live cell, as
+;; if by reproduction.
+
 (defun mutate ()
   "Take a gen as arg and return the next"
   (loop for row in gen
 		for i from 0
 		collect (loop for cell in row
 					  for j from 0
-					  collect (if (= cell 0) 1 0))
-		))
+					  do
+					  (setq n (count-neighbours i j))
+					  collect  (if cell
+								   ;; Alive cell, rules 1 - 3
+								   (case n
+									 (0 0)
+									 (1 0)
+									 (2 1)
+									 (3 1)
+									 (otherwise 0 ;; "Am I dead or alive?"
+												))
+								 ;; Dead cell, rule 4
+								 (if (= n 3) 1 0)
+								 )
+					  )))
 
 (defun progress ()
   (setq gen (mutate))
@@ -58,15 +80,6 @@
 	  (progn
 		(message "Exit from game of life, cleanup")
 		(cancel-timer timer))))
-
-;; 1. Any live cell with fewer than two live neighbours dies, as if caused by
-;; under-population.
-;; 2. Any live cell with two or three live neighbours lives on to the next
-;; generation.
-;; 3. Any live cell with more than three live neighbours dies, as if by
-;; overcrowding.
-;; 4. Any dead cell with exactly three live neighbours becomes a live cell, as
-;; if by reproduction.
 
 (defun game-of-life ()
   "Game of life"
