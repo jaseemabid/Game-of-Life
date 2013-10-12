@@ -1,5 +1,7 @@
+;; ------------------------------------
 ;; Conway's Game of Life
-;; Author: Jaseem Abid <jaseemabid@gmail.com>
+;; Jaseem Abid <jaseemabid@gmail.com>
+;; ------------------------------------
 
 (setq
  life-buffer "*life*"
