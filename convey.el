@@ -100,21 +100,23 @@
 					  )))
 
 (defun progress ()
-  (setq gen (mutate))
-  (show-gen))
-
-(defun cleanup ()
-  "Exit from game of life, cleanup"
   (if (string= (buffer-name) life-buffer)
+	  ;; Run in own buffer only
 	  (progn
-		(message "Exit from game of life, cleanup")
-		(cancel-timer timer))))
+		(setq gen (mutate))
+		(show-gen))
+
+	;; Kill on buffer change,
+	(progn
+	  (message "Exit from game of life, cleanup")
+	  (cancel-timer timer)
+	  (kill-buffer (get-buffer-create life-buffer)))
+	))
 
 (defun game-of-life ()
   "Game of life"
   (interactive)
   (switch-to-buffer (get-buffer-create life-buffer))
-  (setq timer (run-with-timer 0 1 'progress))
-  (add-hook 'kill-buffer-hook 'cleanup))
+  (setq timer (run-with-timer 0 1 'progress)))
 
 ;; (game-of-life)
