@@ -5,7 +5,7 @@
 
 (setq
  life-buffer "*life*"
- alive 176
+ alive ?*
  dead 32
  glider '((0 1 0 0 0 0 0 0)
 		  (0 0 1 0 0 0 0 0)
