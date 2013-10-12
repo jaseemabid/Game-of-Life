@@ -117,6 +117,6 @@
   "Game of life"
   (interactive)
   (switch-to-buffer (get-buffer-create life-buffer))
-  (setq timer (run-with-timer 0 1 'progress)))
+  (setq timer (run-with-timer 0 0.25 'progress)))
 
 ;; (game-of-life)
