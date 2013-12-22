@@ -10,8 +10,7 @@
  life-buffer "*life*"
  alive ?*
  dead 32
- gen (gethash 'gun life-patterns)
- )
+ gen (gethash 'gun life-patterns))
 
 (defun show-gen ()
   (erase-buffer)
@@ -19,8 +18,7 @@
   (loop for row in gen
 		do
 		(insert (concat (loop for i in row
-							  collect (if (= i 0) dead alive)) "\n" )
-				)))
+							  collect (if (= i 0) dead alive)) "\n" ))))
 
 (defun get-neighbour (x y)
   (if (and (> x -1) (> y -1))
@@ -38,8 +36,7 @@
 
 			(get-neighbour (- x 1) (+ y 1))
 			(get-neighbour x (+ y 1))
-			(get-neighbour (+ x 1) (+ y 1))
-			)))
+			(get-neighbour (+ x 1) (+ y 1)))))
 
 ;; 1. Any live cell with fewer than two live neighbours dies, as if caused by
 ;; under-population.
@@ -69,8 +66,7 @@
 												))
 								 ;; Dead cell, rule 4
 								 (if (= n 3) 1 0)
-								 )
-					  )))
+								 ))))
 
 (defun progress ()
   (if (string= (buffer-name) life-buffer)
@@ -83,8 +79,7 @@
 	(progn
 	  (message "Exit from game of life, cleanup")
 	  (cancel-timer timer)
-	  (kill-buffer (get-buffer-create life-buffer)))
-	))
+	  (kill-buffer (get-buffer-create life-buffer)))))
 
 (defun game-of-life ()
   "Game of life"
