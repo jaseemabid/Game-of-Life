@@ -76,8 +76,13 @@ Refer: `life-alive-char'"
 [todo] - Read a standard cell file instead of a list"
 :group 'life)
 
-(defun show-gen ()
-  "[todo] - write doc."
+(defvar life-timer nil
+  "The main timer.")
+
+(defun life-show-gen ()
+  "Render a generation of life.
+
+[todo] - Consider lazy render. Change what needs to be changed."
   (erase-buffer)
   ;; Display grid
   (loop for row in life-pattern
@@ -87,42 +92,44 @@ Refer: `life-alive-char'"
                                           life-dead-char
                                         life-alive-char)) "\n" ))))
 
-(defun get-neighbour (x y)
+(defun life-get-neighbour (x y)
+  "Get item at coordinates X and Y of life-pattern."
   (if (and (> x -1) (> y -1))
 	  (nth x (nth y life-pattern))
 	nil))
 
-(defun count-neighbours (x y)
+(defun life-count-neighbours (x y)
+  "Return the number of alive neighbors item at X Y has.
+
+Ref: `life-get-neighbor'."
   (count 1 (list
-			(get-neighbour (- x 1) (- y 1))
-			(get-neighbour x (- y 1))
-			(get-neighbour (+ x 1) (- y 1))
+			(life-get-neighbour (- x 1) (- y 1))
+			(life-get-neighbour x (- y 1))
+			(life-get-neighbour (+ x 1) (- y 1))
 
-			(get-neighbour (- x 1) y)
-			(get-neighbour (+ x 1) y)
+			(life-get-neighbour (- x 1) y)
+			(life-get-neighbour (+ x 1) y)
 
-			(get-neighbour (- x 1) (+ y 1))
-			(get-neighbour x (+ y 1))
-			(get-neighbour (+ x 1) (+ y 1)))))
+			(life-get-neighbour (- x 1) (+ y 1))
+			(life-get-neighbour x (+ y 1))
+			(life-get-neighbour (+ x 1) (+ y 1)))))
 
-;; 1. Any live cell with fewer than two live neighbours dies, as if caused by
+;; 1. Any live cell with fewer than two live neighbors dies, as if caused by
 ;; under-population.
-;; 2. Any live cell with two or three live neighbours lives on to the next
-;; generation.
-;; 3. Any live cell with more than three live neighbours dies, as if by
-;; overcrowding.
-;; 4. Any dead cell with exactly three live neighbours becomes a live cell, as
+;; 2. Any live cell with two or three live neighbors lives on to the next gen
+;; 3. Any live cell with more than three live neighbors dies, as if by crowding
+;; 4. Any dead cell with exactly three live neighbors becomes a live cell, as
 ;; if by reproduction.
 
-(defun mutate ()
+(defun life-mutate ()
   "Take a gen as arg and return the next"
   (loop for row in life-pattern
 		for i from 0
 		collect (loop for cell in row
 					  for j from 0
 					  do
-					  (setq n (count-neighbours j i))
-					  collect  (if (= cell 1)
+					  (setq n (life-count-neighbours j i))
+					  collect (if (= cell 1)
 								   ;; Alive cell, rules 1 - 3
 								   (case n
 									 (0 0)
@@ -135,24 +142,24 @@ Refer: `life-alive-char'"
 								 (if (= n 3) 1 0)
 								 ))))
 
-(defun progress ()
+(defun life-progress ()
   (if (string= (buffer-name) life-buffer)
 	  ;; Run in own buffer only
 	  (progn
-		(setq life-pattern (mutate))
-		(show-gen))
+		(setq life-pattern (life-mutate))
+		(life-show-gen))
 
 	;; Kill on buffer change,
 	(progn
 	  (message "Exit from game of life, cleanup")
-	  (cancel-timer timer)
+	  (cancel-timer life-timer)
 	  (kill-buffer (get-buffer-create life-buffer)))))
 
 (defun game-of-life ()
   "Game of life"
   (interactive)
   (switch-to-buffer (get-buffer-create life-buffer))
-  (setq timer (run-with-timer 0 0.25 'progress)))
+  (setq life-timer (run-with-timer 0 0.25 'life-progress)))
 
 ;; (game-of-life)
 
