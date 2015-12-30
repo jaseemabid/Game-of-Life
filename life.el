@@ -49,12 +49,12 @@
   ;; :prefix "life-"
   :group 'games)
 
-(defcustom  life-buffer "*life*"
+(defcustom life-buffer "*life*"
   "Name of the buffer to show the game."
   :type 'string
   :group 'life)
 
-(defcustom  life-alive-char ?*
+(defcustom life-alive-char ?*
   "Character that represents a alive point.
 
 Ideally this should be a good unicode character that fills up a
@@ -65,7 +65,7 @@ Alternatives: ● ◌"
   :type 'character
   :group 'life)
 
-(defcustom  life-dead-char 32
+(defcustom life-dead-char 32
   "Character that represents a dead point.
 
 Refer: `life-alive-char'"
@@ -88,33 +88,33 @@ Refer: `life-alive-char'"
   (erase-buffer)
   ;; Display grid
   (loop for row in gen
-		do
-		(insert (concat (loop for i in row
-							  collect (if (= i 0)
+        do
+        (insert (concat (loop for i in row
+                          collect (if (= i 0)
                                           life-dead-char
                                         life-alive-char)) "\n" ))))
 
 (defun life-get-neighbour (x y)
   "Get item at coordinates X and Y of life-pattern."
   (if (and (> x -1) (> y -1))
-	  (nth x (nth y life-pattern))
-	nil))
+      (nth x (nth y life-pattern))
+    nil))
 
 (defun life-count-neighbours (x y)
   "Return the number of alive neighbors item at X Y has.
 
 Ref: `life-get-neighbor'."
   (count 1 (list
-			(life-get-neighbour (- x 1) (- y 1))
-			(life-get-neighbour x (- y 1))
-			(life-get-neighbour (+ x 1) (- y 1))
+            (life-get-neighbour (- x 1) (- y 1))
+            (life-get-neighbour x (- y 1))
+            (life-get-neighbour (+ x 1) (- y 1))
 
-			(life-get-neighbour (- x 1) y)
-			(life-get-neighbour (+ x 1) y)
+            (life-get-neighbour (- x 1) y)
+            (life-get-neighbour (+ x 1) y)
 
-			(life-get-neighbour (- x 1) (+ y 1))
-			(life-get-neighbour x (+ y 1))
-			(life-get-neighbour (+ x 1) (+ y 1)))))
+            (life-get-neighbour (- x 1) (+ y 1))
+            (life-get-neighbour x (+ y 1))
+            (life-get-neighbour (+ x 1) (+ y 1)))))
 
 ;; 1. Any live cell with fewer than two live neighbors dies, as if caused by
 ;; under-population.
@@ -144,17 +144,17 @@ Ref: `life-get-neighbor'."
 (defun life-progress ()
   "Step one generation."
   (if (string= (buffer-name) life-buffer)
-	  ;; Run in own buffer only
+      ;; Run in own buffer only
       (let ((next (life-mutate life-pattern)))
         (life-show-gen next)
         ;; Avoid this mutation if possible
         (setq life-pattern next))
 
     ;; Kill on buffer change,
-	(progn
-	  (message "Exit from game of life, cleanup")
-	  (cancel-timer life-timer)
-	  (kill-buffer (get-buffer-create life-buffer)))))
+    (progn
+      (message "Exit from game of life, cleanup")
+      (cancel-timer life-timer)
+      (kill-buffer (get-buffer-create life-buffer)))))
 
 (defun game-of-life ()
   "Game of life."
