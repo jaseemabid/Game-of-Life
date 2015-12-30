@@ -54,7 +54,7 @@
   :type 'string
   :group 'life)
 
-(defcustom life-alive-char ?*
+(defcustom life-alive-char (propertize "  " 'face '(:background "black"))
   "Character that represents a alive point.
 
 Ideally this should be a good unicode character that fills up a
@@ -65,7 +65,7 @@ Alternatives: ● ◌"
   :type 'character
   :group 'life)
 
-(defcustom life-dead-char 32
+(defcustom life-dead-char (propertize "  " 'face '(:background "white"))
   "Character that represents a dead point.
 
 Refer: `life-alive-char'"
