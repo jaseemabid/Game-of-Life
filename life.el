@@ -35,6 +35,8 @@
 ;; A simple program to play game of life in a Emacs buffer
 
 ;;; Code:
+(eval-and-compile
+  (require 'cl))
 
 ;; [todo] - Use a standard format for reading cell files
 (load-file "./patterns.el")
@@ -57,7 +59,7 @@
 
 Ideally this should be a good unicode character that fills up a
 complete block and have the same size as a `life-dead-char' to
-prevent jerks. Depends on the font used.
+prevent jerks.  Depends on the font used.
 
 Alternatives: ● ◌"
   :type 'character
@@ -79,13 +81,13 @@ Refer: `life-alive-char'"
 (defvar life-timer nil
   "The main timer.")
 
-(defun life-show-gen ()
-  "Render a generation of life.
+(defun life-show-gen (gen)
+  "Render a generation GEN of life.
 
-[todo] - Consider lazy render. Change what needs to be changed."
+[todo] - Consider lazy render.  Change what needs to be changed."
   (erase-buffer)
   ;; Display grid
-  (loop for row in life-pattern
+  (loop for row in gen
 		do
 		(insert (concat (loop for i in row
 							  collect (if (= i 0)
@@ -121,9 +123,9 @@ Ref: `life-get-neighbor'."
 ;; 4. Any dead cell with exactly three live neighbors becomes a live cell, as
 ;; if by reproduction.
 
-(defun life-mutate ()
-  "Take a gen as arg and return the next"
-  (loop for row in life-pattern
+(defun life-mutate (gen)
+  "Take a GEN as arg and return the next."
+  (loop for row in gen
         for i from 0
         collect (loop for cell in row
                       for j from 0
@@ -140,20 +142,22 @@ Ref: `life-get-neighbor'."
                                   (if (= n 3) 1 0))))))
 
 (defun life-progress ()
+  "Step one generation."
   (if (string= (buffer-name) life-buffer)
 	  ;; Run in own buffer only
-	  (progn
-		(setq life-pattern (life-mutate))
-		(life-show-gen))
+      (let ((next (life-mutate life-pattern)))
+        (life-show-gen next)
+        ;; Avoid this mutation if possible
+        (setq life-pattern next))
 
-	;; Kill on buffer change,
+    ;; Kill on buffer change,
 	(progn
 	  (message "Exit from game of life, cleanup")
 	  (cancel-timer life-timer)
 	  (kill-buffer (get-buffer-create life-buffer)))))
 
 (defun game-of-life ()
-  "Game of life"
+  "Game of life."
   (interactive)
   (switch-to-buffer (get-buffer-create life-buffer))
   (setq life-timer (run-with-timer 0 0.25 'life-progress)))
