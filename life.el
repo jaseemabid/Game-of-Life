@@ -124,23 +124,20 @@ Ref: `life-get-neighbor'."
 (defun life-mutate ()
   "Take a gen as arg and return the next"
   (loop for row in life-pattern
-		for i from 0
-		collect (loop for cell in row
-					  for j from 0
-					  do
-					  (setq n (life-count-neighbours j i))
-					  collect (if (= cell 1)
-								   ;; Alive cell, rules 1 - 3
-								   (case n
-									 (0 0)
-									 (1 0)
-									 (2 1)
-									 (3 1)
-									 (otherwise 0 ;; "Am I dead or alive?"
-												))
-								 ;; Dead cell, rule 4
-								 (if (= n 3) 1 0)
-								 ))))
+        for i from 0
+        collect (loop for cell in row
+                      for j from 0
+                      collect (let ((n (life-count-neighbours j i)))
+                                (if (= cell 1)
+                                    ;; Alive cell, rules 1 - 3
+                                    (case n
+                                      (0 0)
+                                      (1 0)
+                                      (2 1)
+                                      (3 1)
+                                      (otherwise 0))
+                                  ;; Dead cell, rule 4
+                                  (if (= n 3) 1 0))))))
 
 (defun life-progress ()
   (if (string= (buffer-name) life-buffer)
