@@ -87,12 +87,15 @@ Refer: `life-alive-char'"
 [todo] - Consider lazy render.  Change what needs to be changed."
   (erase-buffer)
   ;; Display grid
-  (loop for row in gen
-        do
-        (insert (concat (loop for i in row
-                          collect (if (= i 0)
-                                          life-dead-char
-                                        life-alive-char)) "\n" ))))
+  (insert (apply 'concat
+               (loop for row in gen
+                     collect
+                     (concat
+                      (apply 'concat
+                             (loop for i in row
+                                   collect (if (= i 0)
+                                               life-dead-char
+                                             life-alive-char))) "\n")))))
 
 (defun life-get-neighbour (x y)
   "Get item at coordinates X and Y of life-pattern."
